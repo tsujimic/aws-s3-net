@@ -74,9 +74,9 @@ namespace AwsS3MultipartUploader.Net45
                 return 1;
             }
 
-            //! part size: 5MB - 5GB
+            //! part size : 5MB - 100MB
             int partSize = part;
-            partSize = Math.Min(Math.Max(partSize, 5), 5000);
+            partSize = Math.Min(Math.Max(partSize, 5), 100);
             long partBytes = partSize * 1048576L; // 1024 x 1024
 
             //! parallel count : 1 - 64
@@ -113,19 +113,11 @@ namespace AwsS3MultipartUploader.Net45
                 s3.Timeout = TimeSpan.FromSeconds(timeout);
                 s3.ThreadCount = parallelCount;
                 s3.Region = systemName;
-
                 s3.UploadFile(awsAccessKeyId, awsSecretAccessKey, bucketName, keyName, filePath, partBytes, serverEncryption);
-                //multipartUploader.Upload(awsAccessKey, awsSecretAccessKey, bucketName, keyName, filePath, partBytes, serverEncryption);
-
-                //! get metadata
-                //ObjectMetadata objectMetadata = new ObjectMetadata(awsAccessKey, awsSecretAccessKey, regionURL, bucketName, keyName);
 
                 double transferBps = (fileLength / (s3.Elapsed.TotalMilliseconds * 0.001)) * 8d;
                 double transferMBps = transferBps / 1048576d;
 
-                //Logger.WriteLine("Stopwatch : {0}({1} msec)", sw.Elapsed, sw.ElapsedMilliseconds);
-                //Logger.WriteLine("{0} ({1} byte) → {2}/{3}  {4} bps ({5} Mbps)", filePath, fileLength.ToString("#,0"), bucketName, keyName, transferBps, transferMBps.ToString("F"));
-                //Logger.WriteLine("{0}/{1} ETag : {2}", bucketName, keyName, objectMetadata.ETag);
                 Logger.WriteLine("stopwatch : {0}", s3.Elapsed);
                 Logger.WriteLine("average rate (bps) : {0}", transferBps);
                 Logger.WriteLine("average rate (Mbps) : {0}", transferMBps.ToString("F"));

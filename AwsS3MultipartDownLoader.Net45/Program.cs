@@ -71,11 +71,8 @@ namespace AwsS3MultipartDownLoader.Net45
             }
 
 
-            int partSize = part;
-            //! part size : 5MB - 5GB
-            //partSize = Math.Min(Math.Max(partSize, 5), 5000);
-
             //! part size : 5MB - 100MB
+            int partSize = part;
             partSize = Math.Min(Math.Max(partSize, 5), 100);
             long downloadPartSize = partSize * 1024L * 1024L;
 
@@ -93,8 +90,6 @@ namespace AwsS3MultipartDownLoader.Net45
                 Logger.WriteLine("part size (MB) : {0}", partSize);
                 Logger.WriteLine("parallel count : {0}", parallelCount);
                 Logger.WriteLine("timeout (sec) : {0}", timeout);
-
-                //Logger.WriteLine("{0}/{1} → {2}", bucketName, keyName, filePath);
                 Logger.WriteLine("backet name : {0}", bucketName);
                 Logger.WriteLine("key name : {0}", keyName);
                 Logger.WriteLine("file path : {0}", filePath);
@@ -102,23 +97,14 @@ namespace AwsS3MultipartDownLoader.Net45
                 DateTime startDateTime = DateTime.Now;
                 Logger.WriteLine("start datetime : {0}", startDateTime.ToString("yyyy-MM-dd HH:mm:ss:fff"));
 
-                //Stopwatch sw = new Stopwatch();
-                //sw.Start();
-
                 S3MultipartDownloadv2 s3 = new S3MultipartDownloadv2();
                 s3.Timeout = TimeSpan.FromSeconds(timeout);
                 s3.ThreadCount = parallelCount;
                 s3.Region = systemName;
                 long fileLength = s3.DownloadFile(awsAccessKeyId, awsSecretAccessKey, bucketName, keyName, filePath, downloadPartSize);
 
-                //sw.Stop();
-
-                //! elapsed milliseconds
-                //double transferBps = (fileLength / (sw.Elapsed.TotalMilliseconds * 0.001)) * 8d;
                 double transferBps = (fileLength / (s3.Elapsed.TotalMilliseconds * 0.001)) * 8d;
                 double transferMBps = transferBps / 1048576d;
-                //Logger.WriteLine("{0}/{1} → {2} ({3} byte) {4} bps ({5} Mbps)", bucketName, keyName, filePath, fileLength.ToString("#,0"), transferBps, transferMBps.ToString("F"));
-                //Logger.WriteLine("Stopwatch : {0}({1} msec)", sw.Elapsed, sw.Elapsed.TotalMilliseconds);
 
                 Logger.WriteLine("file size (byte) : {0}", fileLength.ToString("#,0"));
                 Logger.WriteLine("stopwatch : {0}", s3.Elapsed);
