@@ -1,1 +1,0 @@
-The AWS SDK for .Net is generally licensed under the Apache 2.0 License, with the Cognito Sync sdk/src/Services/CognitoSync/Custom/SyncManager subcomponent being licensed under the Amazon Software License.

@@ -1,6 +1,0 @@
-{
-  "noArgOverloads": [
-    "DescribeServices",
-	"DescribeSeverityLevels"
-  ]
-}

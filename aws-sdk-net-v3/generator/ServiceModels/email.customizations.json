@@ -1,8 +1,0 @@
-{
-  "noArgOverloads": [
-    "GetSendQuota",
-    "GetSendStatistics",
-    "ListIdentities",
-    "ListVerifiedEmailAddresses"
-  ]
-}

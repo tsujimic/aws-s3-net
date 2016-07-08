@@ -1,7 +1,0 @@
-{
-  "noArgOverloads": [
-    "ListPlatformApplications",
-	"ListSubscriptions",
-	"ListTopics"
-  ]
-}

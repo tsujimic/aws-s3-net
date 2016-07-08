@@ -1,7 +1,0 @@
-{
-  "noArgOverloads": [
-    "DescribeAlarmHistory",
-    "DescribeAlarms",
-    "ListMetrics"
-  ]
-}
