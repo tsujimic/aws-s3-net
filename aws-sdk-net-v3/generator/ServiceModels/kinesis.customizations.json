@@ -1,0 +1,25 @@
+{
+    "noArgOverloads": [
+        "ListStreams"
+    ],
+    "simpleMethods": {
+        "operations": {
+            "IncreaseStreamRetentionPeriod": {
+                "methodForms": [
+                    [
+                        "StreamName",
+                        "RetentionPeriodHours"
+                    ]
+                ]
+            },
+            "DecreaseStreamRetentionPeriod": {
+                "methodForms": [
+                    [
+                        "StreamName",
+                        "RetentionPeriodHours"
+                    ]
+                ]
+            }
+        }
+    }
+}

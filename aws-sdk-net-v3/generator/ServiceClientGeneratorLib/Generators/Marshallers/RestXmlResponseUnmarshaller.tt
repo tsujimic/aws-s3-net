@@ -1,0 +1,153 @@
+﻿<#@ template language="C#" inherits="BaseResponseUnmarshaller" #>
+<#@ assembly name="System.Core" #>
+<#@ import namespace="System.Linq" #>
+<#@ import namespace="System.Text" #>
+<#@ import namespace="System.Collections.Generic" #>
+<#
+    AddLicenseHeader();
+
+    AddCommonUsingStatements();
+#>
+
+namespace <#=this.Config.Namespace #>.Model.Internal.MarshallTransformations
+{
+    /// <summary>
+    /// Response Unmarshaller for <#=this.UnmarshallerBaseName #> operation
+    /// </summary>  
+    public class <#=this.UnmarshallerBaseName #>ResponseUnmarshaller : XmlResponseUnmarshaller
+    {
+        /// <summary>
+        /// Unmarshaller the response from the service to the response class.
+        /// </summary>  
+        /// <param name="context"></param>
+        /// <returns></returns>
+        public override AmazonWebServiceResponse Unmarshall(XmlUnmarshallerContext context)
+        {
+            <#=this.UnmarshallerBaseName #>Response response = new <#=this.Operation.Name #>Response();
+<#
+    var payload= this.Operation.ResponsePayloadMember;
+    var shouldMarshallPayload = (payload != null && payload.IsStructure);
+    if( this.Operation.ResponseHasBodyMembers || shouldMarshallPayload)
+    {
+#>
+            UnmarshallResult(context,response);
+<#    
+	}
+	UnmarshallHeaders();
+	ProcessStatusCode();
+#>            
+            return response;
+		}		
+<#
+    if( this.Operation.ResponseHasBodyMembers || shouldMarshallPayload)
+    {
+#>
+
+<#
+    	if (this.Operation.ResponseBodyMembers.Count == 0 && !shouldMarshallPayload)
+	    {
+#>
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA1801:ReviewUnusedParameters", MessageId="response")]
+<#
+	    }
+#>
+		private static void UnmarshallResult(XmlUnmarshallerContext context, <#=this.Operation.Name #>Response response)
+        {
+            int originalDepth = context.CurrentDepth;
+            int targetDepth = originalDepth + 1;
+<#
+	if (payload == null)
+	{
+#>
+			if (context.IsStartOfDocument) 
+				   targetDepth += 1;
+<#
+	}
+#>
+
+            while (context.Read())
+            {
+				if (context.IsStartElement || context.IsAttribute)
+                {
+<#    
+        foreach (var member in this.Operation.ResponseBodyMembers)
+        {
+			if(member.Shape.IsList)
+			{
+				var listMarshallName = member.Shape.ListMarshallName ?? "member";
+#>
+					if (context.TestExpression("<#=member.MarshallName#>/<#=listMarshallName#>", targetDepth))
+					{
+						var unmarshaller = <#= member.DetermineTypeUnmarshallerInstantiate() #>;
+						response.<#=member.PropertyName#>.Add(unmarshaller.Unmarshall(context));
+						continue;
+					}
+<#
+			}
+			else
+			{
+#>
+					if (context.TestExpression("<#=member.MarshallName#>", targetDepth))
+					{
+						var unmarshaller = <#= member.DetermineTypeUnmarshallerInstantiate() #>;
+						response.<#=member.PropertyName#> = unmarshaller.Unmarshall(context);
+						continue;
+					}
+<#
+			}
+        }
+
+        if (shouldMarshallPayload)
+        {
+#>
+					if (context.TestExpression("<#=payload.MarshallName#>", targetDepth))
+					{
+						var unmarshaller = <#= payload.DetermineTypeUnmarshallerInstantiate() #>;
+						response.<#=payload.PropertyName#> = unmarshaller.Unmarshall(context);
+						continue;
+					}
+<#
+        }
+#>
+				}
+				else if (context.IsEndElement && context.CurrentDepth < originalDepth)
+                {
+                    return;
+                }
+            }
+          
+            return;
+        }
+<#
+    }
+#>  
+
+        /// <summary>
+        /// Unmarshaller error response to exception.
+        /// </summary>  
+        /// <param name="context"></param>
+        /// <param name="innerException"></param>
+        /// <param name="statusCode"></param>
+        /// <returns></returns>
+        public override AmazonServiceException UnmarshallException(XmlUnmarshallerContext context, Exception innerException, HttpStatusCode statusCode)
+        {
+            ErrorResponse errorResponse = ErrorResponseUnmarshaller.GetInstance().Unmarshall(context);
+<#
+    foreach (var exception in this.Operation.Exceptions)
+    {
+#>
+            if (errorResponse.Code != null && errorResponse.Code.Equals("<#=exception.Code #>"))
+            {
+                return new <#=exception.Name #>(errorResponse.Message, innerException, errorResponse.Type, errorResponse.Code, errorResponse.RequestId, statusCode);
+            }
+<#
+    }
+#>
+            return new <#=this.BaseException#>(errorResponse.Message, innerException, errorResponse.Type, errorResponse.Code, errorResponse.RequestId, statusCode);
+        }
+
+<#
+    this.AddResponseSingletonMethod();
+#>
+    }
+}

@@ -1,0 +1,275 @@
+{
+    "runtimePipelineOverride": {
+        "overrides": [
+            { "operation": "addBefore", "newType": "Amazon.S3.Internal.AmazonS3PreMarshallHandler", "targetType": "Amazon.Runtime.Internal.Marshaller" },
+            { "operation": "addAfter", "newType": "Amazon.S3.Internal.AmazonS3PostMarshallHandler", "targetType": "Amazon.Runtime.Internal.Marshaller" },
+            { "operation": "addAfter", "newType": "Amazon.S3.Internal.AmazonS3KmsHandler", "targetType": "Amazon.Runtime.Internal.EndpointResolver" },
+            { "operation": "addBefore", "newType": "Amazon.S3.Internal.AmazonS3ResponseHandler", "targetType": "Amazon.Runtime.Internal.Unmarshaller" },
+            { "operation": "addAfter", "newType": "Amazon.S3.Internal.AmazonS3ExceptionHandler", "targetType": "Amazon.Runtime.Internal.ErrorCallbackHandler" },
+            { "operation": "addAfter", "newType": "Amazon.S3.Internal.AmazonS3RedirectHandler", "targetType": "Amazon.Runtime.Internal.Unmarshaller" },
+            {
+                "operation": "replace",
+                "newType": "Amazon.Runtime.Internal.RetryHandler",
+                "targetType": "Amazon.Runtime.Internal.RetryHandler",
+                "constructorInput": "new Amazon.S3.Internal.AmazonS3RetryPolicy(this.Config.MaxErrorRetry)"
+            }
+        ]
+    },
+    "unityOverrides": {
+        "runtimePipelineOverride": {
+            "overrides": [
+                { "operation": "addBefore", "newType": "Amazon.S3.Internal.AmazonS3PreMarshallHandler", "targetType": "Amazon.Runtime.Internal.Marshaller" },
+                { "operation": "addAfter", "newType": "Amazon.S3.Internal.AmazonS3PostMarshallHandler", "targetType": "Amazon.Runtime.Internal.Marshaller" },
+                { "operation": "addBefore", "newType": "Amazon.S3.Internal.AmazonS3HttpDeleteHandler", "targetType": "Amazon.Runtime.Internal.EndpointResolver" },
+                { "operation": "addAfter", "newType": "Amazon.S3.Internal.AmazonS3KmsHandler", "targetType": "Amazon.Runtime.Internal.EndpointResolver" },
+                { "operation": "addBefore", "newType": "Amazon.S3.Internal.AmazonS3ResponseHandler", "targetType": "Amazon.Runtime.Internal.Unmarshaller" },
+                { "operation": "addAfter", "newType": "Amazon.S3.Internal.AmazonS3ExceptionHandler", "targetType": "Amazon.Runtime.Internal.ErrorCallbackHandler" },
+                { "operation": "addAfter", "newType": "Amazon.S3.Internal.AmazonS3RedirectHandler", "targetType": "Amazon.Runtime.Internal.Unmarshaller" },
+                {
+                    "operation": "replace",
+                    "newType": "Amazon.Runtime.Internal.RetryHandler",
+                    "targetType": "Amazon.Runtime.Internal.RetryHandler",
+                    "constructorInput": "new Amazon.S3.Internal.AmazonS3RetryPolicy(this.Config.MaxErrorRetry)"
+                }
+            ]
+        },
+        "exclusionApi": [
+          "CompleteMultipartUpload",
+          "CreateMultipartUpload",
+          "ListParts",
+          "ListMultipartUploads",
+          "InitiateMultipartUpload",
+          "GetBucketReplication"
+        ]
+    },
+    "noArgOverloads": [
+        "ListBuckets"
+    ],
+    "shapeModifiers": {
+        "*": {
+            "modify": [
+                {
+                    "Bucket": { "emitPropertyName": "BucketName" }
+                }
+            ]
+        },
+        "CompleteMultipartUploadRequest": {
+            "exclude": [
+                "MultipartUpload"
+            ],
+            "inject": [
+                {
+                    "PartETags": {
+                        "shape": "CompletedPartList"
+                    }
+                }
+            ]
+        },
+        "CopyObjectRequest": {
+            "exclude": [
+                "CopySource",
+                "Bucket",
+                "Key"
+            ],
+            "inject": [
+                {
+                    "SourceBucket": {
+                        "shape": "BucketName"
+                    }
+                },
+                {
+                    "SourceKey": {
+                        "shape": "ObjectKey"
+                    }
+                },
+                {
+                    "SourceVersionId": {
+                        "shape": "CopySourceVersionId"
+                    }
+                },
+                {
+                    "DestinationBucket": {
+                        "shape": "BucketName"
+                    }
+                },
+                {
+                    "DestinationKey": {
+                        "shape": "ObjectKey"
+                    }
+                }
+            ]
+        },
+        "DeleteObjectsRequest": {
+            "exclude": [
+                "Delete"
+            ],
+            "inject": [
+                {
+                    "Objects": {
+                        "shape": "ObjectIdentifierList"
+                    }
+                },
+                {
+                    "Quiet": {
+                        "shape": "Quiet"
+                    }
+                }
+            ]
+        },
+        "PutBucketTaggingRequest": {
+            "exclude": [ "Tagging" ],
+            "inject": [
+                {
+                    "TagSet": {
+                        "shape": "TagSet"
+                    }
+                }
+            ]
+        },
+        "PutBucketVersioningRequest": {
+            "modify": [
+                {
+                    "VersioningConfiguration": { "emitPropertyName": "VersioningConfig" }
+                }
+            ]
+        },
+        "PutBucketCorsRequest": {
+            "modify": [
+                {
+                    "CORSConfiguration": { "emitPropertyName": "Configuration" }
+                }
+            ]
+        },
+        "PutBucketLifecycleConfigurationRequest": {
+            "exclude": [
+                "LifecycleConfiguration"
+            ],
+            "inject": [
+                {
+                    "Configuration": {
+                        "shape": "LifecycleConfiguration"
+                    }
+                }
+            ]
+        },
+        "RestoreObjectRequest": {
+            "exclude": [ "RestoreRequest" ],
+            "inject": [
+                {
+                    "Days": {
+                        "shape": "Days"
+                    }
+                }
+            ]
+        },
+        "UploadPartCopyRequest": {
+            "exclude": [
+                "CopySource",
+                "Bucket",
+                "Key"
+            ],
+            "inject": [
+                {
+                    "SourceBucket": {
+                        "shape": "BucketName"
+                    }
+                },
+                {
+                    "SourceKey": {
+                        "shape": "ObjectKey"
+                    }
+                },
+                {
+                    "SourceVersionId": {
+                        "shape": "CopySourceVersionId"
+                    }
+                },
+                {
+                    "DestinationBucket": {
+                        "shape": "BucketName"
+                    }
+                },
+                {
+                    "DestinationKey": {
+                        "shape": "ObjectKey"
+                    }
+                }
+            ]
+        }
+    },
+    "operationModifiers": {
+        "CreateBucket": {
+            "name": "PutBucket"
+        },
+        "CreateMultipartUpload": {
+            "name": "InitiateMultipartUpload"
+        },
+        "DeleteBucketCors": {
+            "name": "DeleteCORSConfiguration"
+        },
+        "DeleteBucketLifecycle": {
+            "name": "DeleteLifecycleConfiguration"
+        },
+        "GetBucketAcl": {
+            "name": "GetACL"
+        },
+        "GetBucketCors": {
+            "name": "GetCORSConfiguration"
+        },
+        "GetObjectAcl": {
+            "exclude": true
+        },
+        "HeadBucket": {
+            "internal": true
+        },
+        "HeadObject": {
+            "name": "GetObjectMetadata"
+        },
+        "ListObjectVersions": {
+            "name": "ListVersions"
+        },
+        "PutBucketAcl": {
+            "name": "PutACL",
+        },
+        "PutBucketCors": {
+            "name": "PutCORSConfiguration"
+        },
+        "PutObjectAcl": {
+            "exclude": true
+        },
+        "UploadPartCopy": {
+            "name": "CopyPart"
+        },
+
+
+        "GetBucketNotification": {
+            "exclude": true
+        },
+        "GetBucketLifecycle": {
+            "exclude": true
+        },
+        "PutBucketLifecycle": {
+            "exclude": true
+        },
+        "PutBucketNotification": {
+            "exclude": true
+        },
+
+        "PutBucketNotificationConfiguration": {
+            "name": "PutBucketNotification"
+        },
+        "PutBucketLifecycleConfiguration": {
+            "name": "PutLifecycleConfiguration"
+        },
+        "GetBucketLifecycleConfiguration": {
+            "name": "GetLifecycleConfiguration"
+        },
+        "GetBucketNotificationConfiguration": {
+            "name": "GetBucketNotification"
+        },
+
+        "GetBucketReplication": { 
+            "documentation": "Retrieves the replication configuration for the given Amazon S3 bucket."
+        }
+    }
+}

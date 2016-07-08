@@ -1,0 +1,8 @@
+{
+  "noArgOverloads": [
+    "DescribeInstanceInformation",
+    "ListDocuments",
+    "ListCommandInvocations",
+    "ListCommands"
+  ]
+}

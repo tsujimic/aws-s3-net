@@ -1,0 +1,8 @@
+{
+	"unityOverrides":{
+		"generateSyncClient" : true
+	},
+	"noArgOverloads": [
+		"GetSessionToken"
+	]
+}
