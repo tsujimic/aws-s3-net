@@ -46,7 +46,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Framework.Cloud.Aws\S3MultipartDownloadRequest.cs" />
-    <Compile Include="Framework.Cloud.Aws\S3MultipartDownloadv2.cs" />
+    <Compile Include="Framework.Cloud.Aws\S3MultipartDownload.cs" />
     <Compile Include="Framework.Cloud.Aws\S3PartFile.cs" />
     <Compile Include="Framework.Log\Logger.cs" />
     <Compile Include="Program.cs" />

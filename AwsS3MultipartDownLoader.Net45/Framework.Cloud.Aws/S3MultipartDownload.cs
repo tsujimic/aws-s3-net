@@ -14,7 +14,7 @@ using Amazon.S3.Transfer;
 namespace Framework.Cloud.Aws
 {
 
-    class S3MultipartDownloadv2
+    class S3MultipartDownload
     {
         public TimeSpan Timeout;
         public int ThreadCount;
@@ -31,7 +31,7 @@ namespace Framework.Cloud.Aws
         //ReaderWriterLockSlim readerWriterLockSlim = new ReaderWriterLockSlim();
         FileStream _outputStream = null;
 
-        public S3MultipartDownloadv2()
+        public S3MultipartDownload()
         {
             this.Timeout = TimeSpan.FromSeconds(300);
             this.ThreadCount = 10;

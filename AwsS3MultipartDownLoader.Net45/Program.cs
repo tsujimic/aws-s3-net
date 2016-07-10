@@ -97,7 +97,7 @@ namespace AwsS3MultipartDownLoader.Net45
                 DateTime startDateTime = DateTime.Now;
                 Logger.WriteLine("start datetime : {0}", startDateTime.ToString("yyyy-MM-dd HH:mm:ss:fff"));
 
-                S3MultipartDownloadv2 s3 = new S3MultipartDownloadv2();
+                S3MultipartDownload s3 = new S3MultipartDownload();
                 s3.Timeout = TimeSpan.FromSeconds(timeout);
                 s3.ThreadCount = parallelCount;
                 s3.Region = systemName;
